@@ -2,9 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
 const https = require("https");
-
+require('dotenv').config();
 
 const app = express();
+
+const apiKey = process.env.API_KEY;
+const audId = process.env.AUD_ID;
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -35,12 +38,12 @@ app.post("/",function(req,res){
 
     const options={
       method: "POST",
-      auth: "harsh:API_KEY"
+      auth: "harsh:"+apiKey
     }
     
 
     const jsonData = JSON.stringify(data);
-    const url = "https://us21.api.mailchimp.com/3.0/lists/audience_id";
+    const url = "https://us21.api.mailchimp.com/3.0/lists/"+audId;
 
     const request = https.request(url, options, function(response){
 
@@ -165,6 +168,3 @@ app.listen(process.env.PORT||3000,function(){
 
 
 
-//a9e1812a2b9c564422e127d686a5a4c4-us21   api key
-//013e828438                              audience id
-//https://<dc>.api.mailchimp.com/3.0/     URL
